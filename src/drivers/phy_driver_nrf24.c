@@ -140,7 +140,7 @@ static int nrf24l01_ioctl(int spi_fd, int cmd, void *arg)
 struct phy_driver nrf24l01 = {
 	.name = "NRF0",
 #ifndef ARDUINO
-	.pathname = "/dev/spidev0.0",
+	.pathname = "/dev/spidev0.1",
 #else
 	.pathname = NULL,
 #endif
