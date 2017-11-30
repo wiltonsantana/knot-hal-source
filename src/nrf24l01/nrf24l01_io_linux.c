@@ -16,7 +16,7 @@
 #include "nrf24l01_io.h"
 #include "spi_bus.h"
 
-#define CE	25
+#define CE	12
 
 /* Time delay in microseconds (us) */
 #define	TPECE2CSN		4
