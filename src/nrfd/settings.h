@@ -19,6 +19,8 @@ struct settings {
 	int dbm;
 
 	int detach;
+
+	int interference;
 } settings;
 
 int settings_parse(int argc, char *argv[], struct settings *settings);

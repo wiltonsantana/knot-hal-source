@@ -995,7 +995,7 @@ static gboolean read_idle(gpointer user_data)
 }
 
 static int radio_init(const char *spi, uint8_t channel, uint8_t rfpwr,
-						const struct nrf24_mac *mac)
+		      const struct nrf24_mac *mac, gboolean interference)
 {
 	const struct nrf24_config config = {
 			.mac = *mac,
@@ -1003,7 +1003,11 @@ static int radio_init(const char *spi, uint8_t channel, uint8_t rfpwr,
 			.name = "nrf0" };
 	int err;
 
-	err = hal_comm_init("NRF0", &config);
+	if (!interference)
+		err = hal_comm_init("NRF0", &config);
+	else
+		err = hal_comm_init_interfered("NRF0", &config);
+
 	if (err < 0) {
 		hal_log_error("Cannot init NRF0 radio. (%d)", err);
 		return err;
@@ -1273,7 +1277,7 @@ static gboolean timeout_iterator(gpointer user_data)
 
 int manager_start(const char *file, const char *host, int port,
 					const char *spi, int channel, int dbm,
-					const char *nodes_file)
+					const char *nodes_file, gboolean interference)
 {
 	int cfg_channel = 76, cfg_dbm = 0;
 	char *json_str;
@@ -1346,7 +1350,7 @@ int manager_start(const char *file, const char *host, int port,
 	}
 
 	err = radio_init(spi, channel, dbm_int2rfpwr(dbm),
-						(const struct nrf24_mac*) &mac);
+						(const struct nrf24_mac*) &mac, interference);
 	if (err < 0)
 		return err;
 

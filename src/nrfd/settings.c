@@ -24,6 +24,7 @@ static const char *spi = "/dev/spidev0.0";
 static int channel = -1;
 static int dbm = -255;
 static gboolean detach = TRUE;
+static gboolean interference = FALSE;
 
 /*
  * OPTIONAL: describe the valid values ranges
@@ -50,6 +51,9 @@ static GOptionEntry options_spec[] = {
 	{ "nodetach", 'n', G_OPTION_FLAG_REVERSE,
 					G_OPTION_ARG_NONE, &detach,
 					"Logging in foreground" },
+	{ "interference", 'I', G_OPTION_FLAG_REVERSE,
+					G_OPTION_ARG_NONE, &interference,
+					"Avoiding Wi-Fi interference" },
 	{ NULL },
 };
 
@@ -78,7 +82,7 @@ static int parse_args(int argc, char *argv[], struct settings *settings)
 	settings->channel = channel;
 	settings->dbm = dbm;
 	settings->detach = detach;
-
+	settings->interference = interference;
 	return EXIT_SUCCESS;
 }
 
