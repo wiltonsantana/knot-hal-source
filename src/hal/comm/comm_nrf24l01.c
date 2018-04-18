@@ -942,6 +942,35 @@ int hal_comm_init(const char *pathname, const void *params)
 	return 0;
 }
 
+int hal_comm_init_interfered(const char *pathname, const void *params)
+{
+        uint16_t ch;
+
+        /* If driver not opened */
+        if (driverIndex != -1)
+                return -EPERM;
+
+        /* Open driver and returns the driver index */
+        driverIndex = phy_open(pathname);
+        if (driverIndex < 0)
+                return driverIndex;
+
+        config = (const struct nrf24_config *) params;
+        mac_local.address.uint64 = config->mac.address.uint64;
+
+        /* Change default broadcasting channel */
+        if (config->channel > 0)
+                channel_mgmt.value = config->channel;
+
+        /* Choose pseudo aleatory data channel */
+	do {
+		hal_getrandom(&ch, sizeof(ch));
+		channel_raw.value = 85 + (ch % 40);
+	} while (channel_mgmt.value == channel_raw.value);
+
+        return 0;
+}
+
 int hal_comm_deinit(void)
 {
 	int err;

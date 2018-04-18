@@ -31,6 +31,7 @@ extern "C" {
  */
 
 int hal_comm_init(const char *pathname, const void *params);
+int hal_comm_init_interfered(const char *pathname, const void *params);
 int hal_comm_deinit(void);
 
 int hal_comm_socket(int domain, int protocol);
