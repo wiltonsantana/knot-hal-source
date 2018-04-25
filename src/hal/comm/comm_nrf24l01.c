@@ -933,11 +933,15 @@ int hal_comm_init(const char *pathname, const void *params)
 	if (config->channel > 0)
 		channel_mgmt.value = config->channel;
 
-	/* Choose pseudo aleatory data channel */
-	do {
-		hal_getrandom(&ch, sizeof(ch));
-		channel_raw.value = ch % 125;
-	} while (channel_mgmt.value == channel_raw.value);
+	/* Change default data channel */
+	if (config->data_channel < 0) {
+		/* Choose pseudo aleatory data channel */
+		do {
+			hal_getrandom(&ch, sizeof(ch));
+			channel_raw.value = ch % 125;
+		} while (channel_mgmt.value == channel_raw.value);
+	} else
+		channel_raw.value = config->data_channel;
 
 	return 0;
 }

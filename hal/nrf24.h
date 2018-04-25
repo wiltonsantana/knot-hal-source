@@ -39,6 +39,7 @@ struct nrf24_config {
 	struct nrf24_mac mac;
 	uint64_t id;
 	int8_t channel;
+	int8_t data_channel;
 	const char *name;
 };
 
