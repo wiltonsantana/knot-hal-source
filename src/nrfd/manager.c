@@ -994,13 +994,14 @@ static gboolean read_idle(gpointer user_data)
 	return TRUE;
 }
 
-static int radio_init(const char *spi, uint8_t channel, uint8_t rfpwr,
-						const struct nrf24_mac *mac)
+static int radio_init(const char *spi, uint8_t channel, uint8_t data_channel,
+		      uint8_t rfpwr, const struct nrf24_mac *mac)
 {
 	const struct nrf24_config config = {
 			.mac = *mac,
 			.id = mac->address.uint64,
 			.channel = channel,
+			.data_channel = data_channel,
 			.name = "nrf0" };
 	int err;
 
@@ -1273,8 +1274,8 @@ static gboolean timeout_iterator(gpointer user_data)
 }
 
 int manager_start(const char *file, const char *host, int port,
-					const char *spi, int channel, int dbm,
-					const char *nodes_file)
+		  const char *spi, int channel, int data_channel, int dbm,
+		  const char *nodes_file)
 {
 	int cfg_channel = 76, cfg_dbm = 0;
 	char *json_str;
@@ -1346,7 +1347,7 @@ int manager_start(const char *file, const char *host, int port,
 		tcp_port = port;
 	}
 
-	err = radio_init(spi, channel, dbm_int2rfpwr(dbm),
+	err = radio_init(spi, channel, data_channel, dbm_int2rfpwr(dbm),
 						(const struct nrf24_mac*) &mac);
 	if (err < 0)
 		return err;

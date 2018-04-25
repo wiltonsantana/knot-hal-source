@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 		hal_log_error("Development mode: %s:%u", settings.host, settings.port);
 
 	err = manager_start(settings.config_path, settings.host, settings.port,
-							settings.spi, settings.channel, settings.dbm, settings.nodes_path);
+							settings.spi, settings.channel, settings.data_channel, settings.dbm, settings.nodes_path);
 	if (err < 0) {
 		hal_log_error("manager_start(): %s(%d)", strerror(-err), -err);
 		retval = EXIT_FAILURE;

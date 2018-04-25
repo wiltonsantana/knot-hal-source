@@ -16,6 +16,7 @@ struct settings {
 
 	const char *spi;
 	int channel;
+	int data_channel;
 	int dbm;
 
 	int detach;

@@ -9,6 +9,6 @@
 #define MAX_PEERS 5
 
 int manager_start(const char *file, const char *host, int port,
-			const char *spi, int channel, int dbm,
-			const char *nodes_file);
+			const char *spi, int channel, int data_channel,
+			int dbm, const char *nodes_file);
 void manager_stop(void);

@@ -22,6 +22,7 @@ static const char *host = NULL;
 static unsigned int port = 8081;
 static const char *spi = "/dev/spidev0.0";
 static int channel = -1;
+static int data_channel = 255;
 static int dbm = -255;
 static gboolean detach = TRUE;
 
@@ -44,6 +45,9 @@ static GOptionEntry options_spec[] = {
 					"spi", "SPI device path" },
 	{ "channel", 'C', 0, G_OPTION_ARG_INT, &channel,
 					"channel", "Broadcast channel" },
+
+	{ "data_channel", 'D', 0, G_OPTION_ARG_INT, &data_channel,
+					"data_channel", "Data channel" },
 	{ "tx", 't', 0, G_OPTION_ARG_INT, &dbm,
 					"tx_power",
 		"TX power: transmition signal strength in dBm" },
