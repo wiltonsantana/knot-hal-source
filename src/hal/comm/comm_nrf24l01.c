@@ -912,11 +912,26 @@ static void running(void)
 	}
 }
 
+static uint8_t choose_data_channel(uint8_t bchannel, uint8_t minChannel,
+				   uint8_t maxChannel)
+{
+	uint8_t dchannel = 0, range = 0;
+	uint16_t channel = 0;
+
+	range = maxChannel - minChannel;
+
+	/* Choose pseudo aleatory data channel */
+	do {
+		hal_getrandom(&channel, sizeof(channel));
+		dchannel = minChannel + (channel % range);
+	} while (bchannel == dchannel);
+
+	return dchannel;
+}
+
 /* Global functions */
 int hal_comm_init(const char *pathname, const void *params)
 {
-	uint16_t ch;
-
 	/* If driver not opened */
 	if (driverIndex != -1)
 		return -EPERM;
@@ -933,11 +948,12 @@ int hal_comm_init(const char *pathname, const void *params)
 	if (config->channel > 0)
 		channel_mgmt.value = config->channel;
 
-	/* Choose pseudo aleatory data channel */
-	do {
-		hal_getrandom(&ch, sizeof(ch));
-		channel_raw.value = ch % 125;
-	} while (channel_mgmt.value == channel_raw.value);
+	if (channel_mgmt.value < 84)
+		channel_raw.value = choose_data_channel(channel_mgmt.value,
+							0, 125);
+	else
+		channel_raw.value = choose_data_channel(channel_mgmt.value,
+							85, 125);
 
 	return 0;
 }
