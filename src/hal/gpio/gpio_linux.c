@@ -17,16 +17,20 @@ int hal_gpio_setup(void)
 
 	mem_fd = open("/dev/mem", O_RDWR|O_SYNC);
 
-	if (mem_fd < 0)
+	if (mem_fd < 0){
+		hal_log_info("MEM_FD ERROR(%d)", errno);
 		return -errno;
-
+	}
 	gpio = (volatile unsigned *)mmap(NULL, BLOCK_SIZE,
 						PROT_READ | PROT_WRITE,
 						MAP_SHARED, mem_fd, GPIO_BASE);
+	hal_logInfo("GPIO: %d", *gpio);
 	close(mem_fd);
 
-	if (gpio == MAP_FAILED)
+	if (gpio == MAP_FAILED) {
+		hal_log_info("MAP_FAILED(%d)", errno);
 		return -errno;
+	}
 
 	return 0;
 }

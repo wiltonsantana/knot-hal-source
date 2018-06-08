@@ -939,6 +939,7 @@ int hal_comm_init(const char *pathname, const void *params)
 
 	/* Open driver and returns the driver index */
 	driverIndex = phy_open(pathname);
+	hal_log_info("HAL_COMM_INIT: %d", driverIndex);
 	if (driverIndex < 0)
 		return driverIndex;
 

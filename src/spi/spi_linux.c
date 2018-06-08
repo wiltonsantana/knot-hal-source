@@ -18,6 +18,7 @@
 #include <string.h>
 #include <stdint.h>
 
+#include "hal/linux_log.h"
 #include "spi_bus.h"
 
 #define BITS_PER_WORD		8
@@ -34,11 +35,13 @@ int8_t spi_bus_init(const char *dev)
 
 	spi_fd = open(dev, O_RDWR);
 
-	if (spi_fd < 1)
+	if (spi_fd < 1) {
+		hal_log_info("SPI_FD ERROR(%d)", errno);
 		return -errno;
-
+	}
 	ioctl(spi_fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
 	if (ioctl(spi_fd, SPI_IOC_RD_MAX_SPEED_HZ, &speed) < 0) {
+		hal_log_info("IOCTL ERROR(%d)", errno);
 		close(spi_fd);
 		return -errno;
 	}

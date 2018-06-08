@@ -16,6 +16,7 @@
 #include "hal/avr_unistd.h"
 #else
 #include <errno.h>
+#include "hal/linux_log.h"
 #include <unistd.h>
 #endif
 
@@ -44,11 +45,12 @@ int phy_open(const char *pathname)
 	/* Return error if driver not found */
 	if (sockfd < 0)
 		return sockfd;
-
+hal_log_info("PHY_OPEN SOCKFD %d", sockfd);
 	/* If not open */
 	if (driver_ops[sockfd]->ref_open == 0) {
 		/* Open the driver - returns fd */
 		err = driver_ops[sockfd]->open(driver_ops[sockfd]->pathname);
+		hal_log_info("PHY_OPEN %d", err);
 		if (err < 0)
 			return err;
 

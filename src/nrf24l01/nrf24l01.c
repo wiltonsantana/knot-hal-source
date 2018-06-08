@@ -14,6 +14,7 @@
 #include "nrf24l01.h"
 #include "nrf24l01_io.h"
 
+#include "hal/linux_log.h"
 #define DATA_SIZE	sizeof(uint8_t)
 
 /* Time delay in microseconds (us) */
@@ -144,8 +145,10 @@ int8_t nrf24l01_init(const char *dev, uint8_t tx_pwr)
 	/* example of dev = "/dev/spidev0.0" */
 	spi_fd = io_setup(dev);
 	if (spi_fd < 0)
+	{
+		hal_log_info("SPI_FD ERROR");
 		return spi_fd;
-
+	}
 	/* Reset device in power down mode */
 	nrf24reg_write(spi_fd, NRF24_CONFIG, NRF24_CONFIG_RST);
 	/* Delay to establish to operational timing of the nRF24L01 */

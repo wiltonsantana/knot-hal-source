@@ -9,6 +9,7 @@
 
 #include <unistd.h>
 
+#include "hal/linux_log.h"
 #include "hal/gpio_sysfs.h"
 #include "nrf24l01_io.h"
 #include "spi_bus.h"
@@ -42,12 +43,14 @@ int io_setup(const char *dev)
 	hal_gpio_setup();
 
 	err = hal_gpio_pin_mode(CE, HAL_GPIO_OUTPUT);
-	if (err < 0)
+	if (err < 0) {
+		hal_log_info("IO_SETUP ERROR CE (%d)", err);
 		return err;
-
+	}
 	err = hal_gpio_pin_mode(IRQ, HAL_GPIO_INPUT);
 	if (err < 0){
 		hal_gpio_unmap();
+		hal_log_info("IO_SETUP ERROR IRQ (%d)", err);
 		return err;
 	}
 
